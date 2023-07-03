@@ -1,10 +1,15 @@
 import { FC, useMemo, useEffect, useState } from "react";
 import { weekNames, monthNames } from "../util/util";
-import { getModifiedDateObj, getTotalNoOfDays } from "../util/util";
+import { getModifiedDateObj, getTotalNoOfDays, getCalDatesObj } from "../util/util";
 import "./calendar.scss";
 
 interface CalendarProps {
   startWeek?: "SUNDAY" | "MONDAY";
+}
+
+interface Calbody {
+  label: string | number,
+  key: string
 }
 
 const Calendar: FC<CalendarProps> = (props) => {
@@ -14,7 +19,7 @@ const Calendar: FC<CalendarProps> = (props) => {
   const [totalNoDays, setTotalNoDays] = useState<number>(0);
   const [monthIndex, setMonthIndex] = useState(0);
   const [year, setYear] = useState(0);
-  const [isMonthUpdated, setMonthUpdateState] = useState(false)
+  const [calBodyData, setCalBodyData] = useState<Calbody[][]>([]);
 
   const calendarHeader = useMemo(() => {
     return weekNames.map((weekName: string, index: number) => {
@@ -33,66 +38,16 @@ const Calendar: FC<CalendarProps> = (props) => {
     setYear(monthStartDate.getFullYear())
     setMonthFirstDay(monthStartDate.getDay());
     setTotalNoDays(totalDays);
-  },[])
+  },[]);
 
   useEffect(() => {
-    // let monthStartDate = getModifiedDateObj(monthIndex,year);
-    // let totalDays = getTotalNoOfDays(
-    //   monthStartDate.getMonth(),
-    //   monthStartDate.getFullYear()
-    // );
-    // setMonthIndex(monthStartDate.getMonth());
-    // setYear(monthStartDate.getFullYear())
-    // setMonthFirstDay(monthStartDate.getDay());
-    // setTotalNoDays(totalDays);
-  }, [isMonthUpdated]);
-
-  const firstWeek = useMemo(() => {
-    let firstRow = [];
-    let dates = 1;
-    for (let i = 0; i < 7; i++) {
-      if (i < monthFirstDay) {
-        firstRow.push(<td className="CalDay"></td>);
-      } else {
-        firstRow.push(<td className="CalDay">{dates}</td>);
-        dates = dates + 1;
-      }
+    if (totalNoDays > 0) {
+      console.log(totalNoDays,monthFirstDay)
+      let body = getCalDatesObj(totalNoDays,monthFirstDay);
+      setCalBodyData(body)
     }
-    return firstRow;
-  }, [monthFirstDay,monthIndex]);
+  },[monthIndex]);
 
-  let calbody = [];
-
-  let tempBody: any = [];
-
-  let weekcounter = 0;
-  let dates = 7 - monthFirstDay + 1;
-  for (let i = 7 - monthFirstDay; i <= totalNoDays; i++) {
-    if (dates <= totalNoDays) {
-      if (weekcounter < 7) {
-        weekcounter = weekcounter + 1;
-      } else {
-        weekcounter = 1;
-      }
-
-      let calDate = <td>{dates}</td>;
-      tempBody.push(calDate);
-      if (weekcounter === 7) {
-        let week = <tr>{tempBody}</tr>;
-        calbody.push(week);
-        tempBody = [];
-      }
-      dates = dates + 1;
-    }
-  }
-
-  if (tempBody.length > 0) {
-    for (let i = tempBody.length; i < 7; i++) {
-        tempBody.push(<td></td>);
-    }
-    let week = <tr>{tempBody}</tr>;
-        calbody.push(week);
-  }
 
 //   --------- next month code goes here ---------
 
@@ -105,13 +60,12 @@ const updateNextMonthDetails = () => {
         updatedYear = year + 1
     }
 
-    setMonthUpdateState(!isMonthUpdated);
-
     let monthStartDate = getModifiedDateObj(updatedMonthIndex,updatedYear);
     let totalDays = getTotalNoOfDays(
       monthStartDate.getMonth(),
       monthStartDate.getFullYear()
     );
+
     setMonthIndex(monthStartDate.getMonth());
     setYear(monthStartDate.getFullYear())
     setMonthFirstDay(monthStartDate.getDay());
@@ -132,20 +86,27 @@ const updatePreviousMonthDetails = () => {
         updatedYear = year - 1
     }
 
-    setMonthUpdateState(!isMonthUpdated);
-
     let monthStartDate = getModifiedDateObj(updatedMonthIndex,updatedYear);
     let totalDays = getTotalNoOfDays(
       monthStartDate.getMonth(),
       monthStartDate.getFullYear()
     );
+
     setMonthIndex(monthStartDate.getMonth());
-    setYear(monthStartDate.getFullYear())
+    setYear(monthStartDate.getFullYear());
     setMonthFirstDay(monthStartDate.getDay());
     setTotalNoDays(totalDays);
 }
 
 //  ---------- end previous month code ----------
+
+let view = calBodyData.map((weeksArray,index) => {
+  return <tr key={`week_${index}`}>
+    {weeksArray.map((dayObj,index) => {
+      return <td key={`${dayObj.key}_${index}`}>{dayObj.label}</td>
+    })}
+  </tr>
+})
 
   return (
     <div className="wrapper">
@@ -155,8 +116,7 @@ const updatePreviousMonthDetails = () => {
           <tr>{calendarHeader}</tr>
         </thead>
         <tbody>
-          <tr>{firstWeek}</tr>
-          {calbody}
+          {view}
         </tbody>
       </table>
     </div>
