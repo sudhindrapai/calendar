@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-
+import Calendar from './component/calendar';
 function App() {
   return (
     <div className="App">
-      
+      <Calendar />
     </div>
   );
 }

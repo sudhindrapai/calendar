@@ -1,0 +1,58 @@
+.wrapper{
+    width: 100%;
+    box-sizing: border-box;
+
+    & .calendarWrapper {
+        border: 1px solid #ccc;
+        width: 100%;
+
+        & .weekNames{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding-block: 2px;
+            font-weight: 300
+        }
+
+        & .calendarBody {
+            display: flex;
+            flex-flow: column;
+
+            & .weeks{
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                justify-content: space-around;
+
+                & .CalDay {
+                    border: 1px solid #ccc;
+                    min-width: 200px;
+                    min-height: 100px;
+                }
+            }
+        }
+
+    }
+}
+
+.wrapper{
+    width: 100%;
+    box-sizing: border-box;
+
+    & table{
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+        & thead tr td{
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 3px;
+        }
+        & tbody tr td{
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 3px;
+        }
+    }
+}
