@@ -1,6 +1,7 @@
 interface Calbody {
   label: string | number;
   key: string;
+  isTodayDate:boolean
 }
 
 export const getModifiedDateObj = (month: number, year: number): Date => {
@@ -45,7 +46,9 @@ export const getTotalNoOfDays = (monthNo: number, year: number): number => {
 
 export const getCalDatesObj = (
   totalNoOfDays: number,
-  monthFirstDay: number
+  monthFirstDay: number,
+  isCurrentMonth: boolean,
+  currentDate:number
 ) => {
   let dates = 1;
   let calBody = [];
@@ -64,12 +67,14 @@ export const getCalDatesObj = (
       let tempObj = {} as Calbody;
       tempObj["label"] = "";
       tempObj["key"] = `calDay_${i}`;
+      tempObj["isTodayDate"] = false;
       tempRow.push(tempObj);
       i++;
     } else {
       let tempObj = {} as Calbody;
       tempObj["label"] = dates;
       tempObj["key"] = `calDay_${i}`;
+      tempObj["isTodayDate"] = isCurrentMonth && currentDate === dates;
       tempRow.push(tempObj);
       dates = dates + 1;
     }

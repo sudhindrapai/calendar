@@ -14,6 +14,7 @@ interface CalendarProps {
 interface Calbody {
   label: string | number;
   key: string;
+  isTodayDate: boolean
 }
 
 const Calendar: FC<CalendarProps> = (props) => {
@@ -49,7 +50,9 @@ const Calendar: FC<CalendarProps> = (props) => {
 
   useEffect(() => {
     if (totalNoDays > 0) {
-      let body = getCalDatesObj(totalNoDays, monthFirstDay);
+      let dateObj = new Date();
+      let isCurrentMonth = dateObj.getMonth() === monthIndex && year === dateObj.getFullYear()
+      let body = getCalDatesObj(totalNoDays, monthFirstDay, isCurrentMonth, dateObj.getDate());
       setCalBodyData(body);
     }
   }, [monthIndex]);
@@ -108,11 +111,33 @@ const Calendar: FC<CalendarProps> = (props) => {
     return (
       <tr key={`week_${index}`}>
         {weeksArray.map((dayObj, index) => {
-          return <td key={`${dayObj.key}_${index}`}><div className="date">{dayObj.label}</div></td>;
+          return (
+            <td key={`${dayObj.key}_${index}`}>
+              <div className="date">{dayObj.isTodayDate ? <span className="today">{dayObj.label}</span>:<span>{dayObj.label}</span>}</div>
+            </td>
+          );
         })}
       </tr>
     );
   });
+
+  // ----------- code for today -----
+
+  const loadCurrentMonthCal = () => {
+    let dateObj = new Date();
+    let monthStartDate = getModifiedDateObj(
+      dateObj.getMonth(),
+      dateObj.getFullYear()
+    );
+    let totalDays = getTotalNoOfDays(
+      monthStartDate.getMonth(),
+      monthStartDate.getFullYear()
+    );
+    setMonthIndex(monthStartDate.getMonth());
+    setYear(monthStartDate.getFullYear());
+    setMonthFirstDay(monthStartDate.getDay());
+    setTotalNoDays(totalDays);
+  };
 
   return (
     <div className="wrapper">
@@ -122,7 +147,8 @@ const Calendar: FC<CalendarProps> = (props) => {
         </div>
         <div className="action">
           <div onClick={updatePreviousMonthDetails}>&#x3c;</div>
-          <div>Today</div> <div onClick={updateNextMonthDetails}>&#x3e;</div>
+          <div onClick={loadCurrentMonthCal}>Today</div>
+          <div onClick={updateNextMonthDetails}>&#x3e;</div>
         </div>
       </div>
       <table>

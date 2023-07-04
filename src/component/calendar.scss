@@ -2,6 +2,7 @@
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
+    max-width: 1400px;
 
     & .calendarHeader{
         width: 100%;
@@ -41,14 +42,35 @@
             border: 1px solid #ccc;
             text-align: center;
             padding: 3px;
+            max-width: 70px;
+            width: 70px;
         }
         & tbody tr td{
+            max-width: 70px;
             border: 1px solid #ccc;
             text-align: center;
             padding: 3px;
 
             & .date{
                 min-height: 70px;
+                position: relative;
+                & .today{
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 24px;
+                    width: 24px;
+                    font-size: 14px;
+                    background-color: #fb2629;
+                    border-radius: 50%;
+                    color: #ffffff;
+                    font-weight: bold;
+                }
+                & span {
+                    position: absolute;
+                    top: 0;
+                    right: 2%;
+                }
             }
 
         }
