@@ -1,12 +1,12 @@
 interface Calbody {
-  label: string | number,
-  key: string
+  label: string | number;
+  key: string;
 }
 
-export const getModifiedDateObj = (month:number,year:number): Date => {
+export const getModifiedDateObj = (month: number, year: number): Date => {
   const dateObj = new Date();
   dateObj.setMonth(month, 1);
-  dateObj.setFullYear(year)
+  dateObj.setFullYear(year);
   return dateObj;
 };
 
@@ -43,18 +43,29 @@ export const getTotalNoOfDays = (monthNo: number, year: number): number => {
   return totalDays;
 };
 
-export const getCalDatesObj = (totalNoOfDays:number, monthFirstDay:number) => {
-
+export const getCalDatesObj = (
+  totalNoOfDays: number,
+  monthFirstDay: number
+) => {
   let dates = 1;
   let calBody = [];
-  let tempRow = []
-  for (let i = 0; i < 7; i++) {
+  let tempRow = [];
+  let weekcounter = 0;
+  let i = 0;
+  
+  while (dates <= totalNoOfDays) {
+    if (weekcounter < 7) {
+      weekcounter = weekcounter + 1;
+    } else {
+      weekcounter = 1;
+    }
+
     if (i < monthFirstDay) {
       let tempObj = {} as Calbody;
       tempObj["label"] = "";
       tempObj["key"] = `calDay_${i}`;
       tempRow.push(tempObj);
-      
+      i++;
     } else {
       let tempObj = {} as Calbody;
       tempObj["label"] = dates;
@@ -62,31 +73,10 @@ export const getCalDatesObj = (totalNoOfDays:number, monthFirstDay:number) => {
       tempRow.push(tempObj);
       dates = dates + 1;
     }
-  }
-  calBody.push(tempRow);
 
-  tempRow = [];
-
-  let weekcounter = 0;
-  for (let i = dates; i<= totalNoOfDays; i++) {
-    if (dates <= totalNoOfDays) {
-      if (weekcounter < 7) {
-        weekcounter = weekcounter + 1;
-      } else {
-        weekcounter = 1;
-      }
-
-      let tempObj = {} as Calbody;
-      tempObj["label"] = dates;
-      tempObj["key"] = `calDay_${dates}`;
-      tempRow.push(tempObj);;
-
-      if (weekcounter === 7) {
-        calBody.push(tempRow);
-        tempRow = [];
-      }
-      dates = dates + 1;
-
+    if (weekcounter === 7) {
+      calBody.push(tempRow);
+      tempRow = [];
     }
   }
 
@@ -98,11 +88,10 @@ export const getCalDatesObj = (totalNoOfDays:number, monthFirstDay:number) => {
       tempRow.push(tempObj);
     }
     calBody.push(tempRow);
-        tempRow = [];
+    tempRow = [];
   }
 
   return calBody;
-
 };
 
 export const monthNames: string[] = [

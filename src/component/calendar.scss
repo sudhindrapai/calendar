@@ -1,43 +1,36 @@
 .wrapper{
     width: 100%;
     box-sizing: border-box;
+    padding: 10px;
 
-    & .calendarWrapper {
-        border: 1px solid #ccc;
+    & .calendarHeader{
         width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
 
-        & .weekNames{
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding-block: 2px;
-            font-weight: 300
+        & .monthDetails span{
+            font-size: 28px;
+            font-weight: 600;
         }
 
-        & .calendarBody {
+        & .action{
             display: flex;
-            flex-flow: column;
-
-            & .weeks{
-                display: flex;
-                flex-flow: row nowrap;
-                align-items: center;
-                justify-content: space-around;
-
-                & .CalDay {
-                    border: 1px solid #ccc;
-                    min-width: 200px;
-                    min-height: 100px;
-                }
+            gap: 10px;
+            border: 1px solid #ccc;
+            padding-inline: 16px;
+            padding-block: 4px;
+            font-size: 12px;
+            border-radius: 10px;
+            & div{
+                width: 100%;
+                cursor: pointer;
             }
         }
 
     }
-}
-
-.wrapper{
-    width: 100%;
-    box-sizing: border-box;
 
     & table{
         width: 100%;
@@ -53,6 +46,11 @@
             border: 1px solid #ccc;
             text-align: center;
             padding: 3px;
+
+            & .date{
+                min-height: 70px;
+            }
+
         }
     }
 }

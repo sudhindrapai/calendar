@@ -1,6 +1,10 @@
 import { FC, useMemo, useEffect, useState } from "react";
 import { weekNames, monthNames } from "../util/util";
-import { getModifiedDateObj, getTotalNoOfDays, getCalDatesObj } from "../util/util";
+import {
+  getModifiedDateObj,
+  getTotalNoOfDays,
+  getCalDatesObj,
+} from "../util/util";
 import "./calendar.scss";
 
 interface CalendarProps {
@@ -8,12 +12,12 @@ interface CalendarProps {
 }
 
 interface Calbody {
-  label: string | number,
-  key: string
+  label: string | number;
+  key: string;
 }
 
 const Calendar: FC<CalendarProps> = (props) => {
-  const { startWeek} = props;
+  const { startWeek } = props;
 
   const [monthFirstDay, setMonthFirstDay] = useState<number>(0);
   const [totalNoDays, setTotalNoDays] = useState<number>(0);
@@ -29,64 +33,39 @@ const Calendar: FC<CalendarProps> = (props) => {
 
   useEffect(() => {
     let dateObj = new Date();
-    let monthStartDate = getModifiedDateObj(dateObj.getMonth(),dateObj.getFullYear());
+    let monthStartDate = getModifiedDateObj(
+      dateObj.getMonth(),
+      dateObj.getFullYear()
+    );
     let totalDays = getTotalNoOfDays(
       monthStartDate.getMonth(),
       monthStartDate.getFullYear()
     );
     setMonthIndex(monthStartDate.getMonth());
-    setYear(monthStartDate.getFullYear())
+    setYear(monthStartDate.getFullYear());
     setMonthFirstDay(monthStartDate.getDay());
     setTotalNoDays(totalDays);
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (totalNoDays > 0) {
-      console.log(totalNoDays,monthFirstDay)
-      let body = getCalDatesObj(totalNoDays,monthFirstDay);
-      setCalBodyData(body)
+      let body = getCalDatesObj(totalNoDays, monthFirstDay);
+      setCalBodyData(body);
     }
-  },[monthIndex]);
+  }, [monthIndex]);
 
+  //   --------- next month code goes here ---------
 
-//   --------- next month code goes here ---------
-
-const updateNextMonthDetails = () => {
+  const updateNextMonthDetails = () => {
     let updatedMonthIndex = monthIndex + 1;
     let updatedYear = year;
 
     if (updatedMonthIndex === 12) {
-        updatedMonthIndex = 0;
-        updatedYear = year + 1
+      updatedMonthIndex = 0;
+      updatedYear = year + 1;
     }
 
-    let monthStartDate = getModifiedDateObj(updatedMonthIndex,updatedYear);
-    let totalDays = getTotalNoOfDays(
-      monthStartDate.getMonth(),
-      monthStartDate.getFullYear()
-    );
-
-    setMonthIndex(monthStartDate.getMonth());
-    setYear(monthStartDate.getFullYear())
-    setMonthFirstDay(monthStartDate.getDay());
-    setTotalNoDays(totalDays);
-}
-
-
-//  --------- end nextmonth code -----------------
-
-//  ---------- previous month code goes here -----
-
-const updatePreviousMonthDetails = () => {
-    let updatedMonthIndex = monthIndex - 1;
-    let updatedYear = year;
-
-    if (updatedMonthIndex === -1) {
-        updatedMonthIndex = 11;
-        updatedYear = year - 1
-    }
-
-    let monthStartDate = getModifiedDateObj(updatedMonthIndex,updatedYear);
+    let monthStartDate = getModifiedDateObj(updatedMonthIndex, updatedYear);
     let totalDays = getTotalNoOfDays(
       monthStartDate.getMonth(),
       monthStartDate.getFullYear()
@@ -96,35 +75,68 @@ const updatePreviousMonthDetails = () => {
     setYear(monthStartDate.getFullYear());
     setMonthFirstDay(monthStartDate.getDay());
     setTotalNoDays(totalDays);
-}
+  };
 
-//  ---------- end previous month code ----------
+  //  --------- end nextmonth code -----------------
 
-let view = calBodyData.map((weeksArray,index) => {
-  return <tr key={`week_${index}`}>
-    {weeksArray.map((dayObj,index) => {
-      return <td key={`${dayObj.key}_${index}`}>{dayObj.label}</td>
-    })}
-  </tr>
-})
+  //  ---------- previous month code goes here -----
+
+  const updatePreviousMonthDetails = () => {
+    let updatedMonthIndex = monthIndex - 1;
+    let updatedYear = year;
+
+    if (updatedMonthIndex === -1) {
+      updatedMonthIndex = 11;
+      updatedYear = year - 1;
+    }
+
+    let monthStartDate = getModifiedDateObj(updatedMonthIndex, updatedYear);
+    let totalDays = getTotalNoOfDays(
+      monthStartDate.getMonth(),
+      monthStartDate.getFullYear()
+    );
+
+    setMonthIndex(monthStartDate.getMonth());
+    setYear(monthStartDate.getFullYear());
+    setMonthFirstDay(monthStartDate.getDay());
+    setTotalNoDays(totalDays);
+  };
+
+  //  ---------- end previous month code ----------
+
+  let view = calBodyData.map((weeksArray, index) => {
+    return (
+      <tr key={`week_${index}`}>
+        {weeksArray.map((dayObj, index) => {
+          return <td key={`${dayObj.key}_${index}`}><div className="date">{dayObj.label}</div></td>;
+        })}
+      </tr>
+    );
+  });
 
   return (
     <div className="wrapper">
-       <div onClick={updatePreviousMonthDetails} >Previous</div> {monthNames[monthIndex]} - {year} <div onClick={updateNextMonthDetails}>Next</div>
+      <div className="calendarHeader">
+        <div className="monthDetails">
+          <span>{monthNames[monthIndex]}</span> {year}
+        </div>
+        <div className="action">
+          <div onClick={updatePreviousMonthDetails}>&#x3c;</div>
+          <div>Today</div> <div onClick={updateNextMonthDetails}>&#x3e;</div>
+        </div>
+      </div>
       <table>
         <thead>
           <tr>{calendarHeader}</tr>
         </thead>
-        <tbody>
-          {view}
-        </tbody>
+        <tbody>{view}</tbody>
       </table>
     </div>
   );
 };
 
 Calendar.defaultProps = {
-  startWeek: "SUNDAY"
+  startWeek: "SUNDAY",
 };
 
 export default Calendar;
