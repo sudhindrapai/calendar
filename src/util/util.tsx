@@ -1,7 +1,8 @@
 interface Calbody {
   label: string | number;
   key: string;
-  isTodayDate:boolean
+  isTodayDate: boolean;
+  isCurrentMontDate:boolean;
 }
 
 export const getModifiedDateObj = (month: number, year: number): Date => {
@@ -44,18 +45,48 @@ export const getTotalNoOfDays = (monthNo: number, year: number): number => {
   return totalDays;
 };
 
+const getPreviousMonthDates = (
+  monthIndex: number,
+  year: number,
+  datesCount: number
+) => {
+  let updatedMonthIndex = monthIndex - 1;
+  let updatedYear = updatedMonthIndex === 0 ? year - 1 : year;
+  if (monthIndex < 0) {
+    updatedMonthIndex = 11;
+  }
+  let prevMonthDateObj = getModifiedDateObj(updatedMonthIndex, updatedYear);
+
+  let totalNoOfDays = getTotalNoOfDays(
+    prevMonthDateObj.getMonth(),
+    prevMonthDateObj.getFullYear()
+  );
+
+  let datesArray = [];
+
+  for (let i = 1; i <= datesCount; i++) {
+    datesArray.push(totalNoOfDays);
+    totalNoOfDays = totalNoOfDays - 1;
+  }
+  return datesArray.reverse();
+};
+
 export const getCalDatesObj = (
   totalNoOfDays: number,
   monthFirstDay: number,
   isCurrentMonth: boolean,
-  currentDate:number
+  currentDate: number,
+  monthIndex: number,
+  year: number
 ) => {
   let dates = 1;
   let calBody = [];
   let tempRow = [];
   let weekcounter = 0;
   let i = 0;
-  
+
+  let preMonthDates = getPreviousMonthDates(monthIndex, year, monthFirstDay);
+
   while (dates <= totalNoOfDays) {
     if (weekcounter < 7) {
       weekcounter = weekcounter + 1;
@@ -65,9 +96,10 @@ export const getCalDatesObj = (
 
     if (i < monthFirstDay) {
       let tempObj = {} as Calbody;
-      tempObj["label"] = "";
+      tempObj["label"] = preMonthDates[i];
       tempObj["key"] = `calDay_${i}`;
       tempObj["isTodayDate"] = false;
+      tempObj["isCurrentMontDate"] = false;
       tempRow.push(tempObj);
       i++;
     } else {
@@ -75,6 +107,7 @@ export const getCalDatesObj = (
       tempObj["label"] = dates;
       tempObj["key"] = `calDay_${i}`;
       tempObj["isTodayDate"] = isCurrentMonth && currentDate === dates;
+      tempObj["isCurrentMontDate"] = true;
       tempRow.push(tempObj);
       dates = dates + 1;
     }

@@ -14,7 +14,8 @@ interface CalendarProps {
 interface Calbody {
   label: string | number;
   key: string;
-  isTodayDate: boolean
+  isTodayDate: boolean;
+  isCurrentMontDate:boolean
 }
 
 const Calendar: FC<CalendarProps> = (props) => {
@@ -52,7 +53,7 @@ const Calendar: FC<CalendarProps> = (props) => {
     if (totalNoDays > 0) {
       let dateObj = new Date();
       let isCurrentMonth = dateObj.getMonth() === monthIndex && year === dateObj.getFullYear()
-      let body = getCalDatesObj(totalNoDays, monthFirstDay, isCurrentMonth, dateObj.getDate());
+      let body = getCalDatesObj(totalNoDays, monthFirstDay, isCurrentMonth, dateObj.getDate(),monthIndex,year);
       setCalBodyData(body);
     }
   }, [monthIndex]);
@@ -111,9 +112,10 @@ const Calendar: FC<CalendarProps> = (props) => {
     return (
       <tr key={`week_${index}`}>
         {weeksArray.map((dayObj, index) => {
+          let dateClassName = dayObj.isCurrentMontDate ? "date" : "oldDate"
           return (
             <td key={`${dayObj.key}_${index}`}>
-              <div className="date">{dayObj.isTodayDate ? <span className="today">{dayObj.label}</span>:<span>{dayObj.label}</span>}</div>
+              <div className={dateClassName}>{dayObj.isTodayDate ? <span className="today">{dayObj.label}</span>:<span>{dayObj.label}</span>}</div>
             </td>
           );
         })}

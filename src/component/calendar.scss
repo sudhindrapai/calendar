@@ -51,6 +51,17 @@
             text-align: center;
             padding: 3px;
 
+            & .oldDate{
+                min-height: 70px;
+                position: relative;
+                opacity: 0.2;
+
+                & span {
+                    position: absolute;
+                    top: 0;
+                    right: 2%;
+                }
+            }
             & .date{
                 min-height: 70px;
                 position: relative;
