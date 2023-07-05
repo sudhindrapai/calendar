@@ -71,6 +71,37 @@ const getPreviousMonthDates = (
   return datesArray.reverse();
 };
 
+const checkForCalDates = (monthIndex:number,year:number) => {
+  if (typeof (Storage) !== "undefined") {
+    let calObjString = localStorage.getItem("calDates");
+    if (calObjString) {
+      let calObj = JSON.parse(calObjString);
+      let key = `${monthIndex}${year}`;
+      if (calObj[key] !== undefined) {
+        return calObj[key];
+      } else {
+        return null;
+      }
+    }
+  }
+};
+
+const setCalDetailToLocalStorage = (monthIndex:number, year:number, calDetails:Calbody[][]) => {
+  if (typeof (Storage) !== "undefined") {
+    let key = `${monthIndex}${year}`;
+    let calObjString = localStorage.getItem("calDates");
+    if (calObjString) {
+      let calObj = JSON.parse(calObjString);
+      calObj[key] = JSON.stringify(calDetails);
+      localStorage.setItem("calDates",JSON.stringify(calObj))
+    } else {
+      let tempObj:any = {};
+      tempObj[key] = JSON.stringify(calDetails);
+      localStorage.setItem("calDates",JSON.stringify(tempObj));
+    }
+  }
+};
+
 export const getCalDatesObj = (
   totalNoOfDays: number,
   monthFirstDay: number,
@@ -79,6 +110,13 @@ export const getCalDatesObj = (
   monthIndex: number,
   year: number
 ) => {
+
+  let calDetails = checkForCalDates(monthIndex,year);
+
+  if (calDetails !== null) {
+    return JSON.parse(calDetails)
+  }
+
   let dates = 1;
   let calBody = [];
   let tempRow = [];
@@ -150,8 +188,8 @@ export const getCalDatesObj = (
     calBody.push(tempRow);
     tempRow = [];
   }
-  console.log(calBody.length)
-
+ 
+  setCalDetailToLocalStorage(monthIndex,year,calBody);
   return calBody;
 };
 
