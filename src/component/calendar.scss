@@ -61,6 +61,18 @@
                     top: 0;
                     right: 2%;
                 }
+                & .today{
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 24px;
+                    width: 24px;
+                    font-size: 14px;
+                    background-color: #fb2629;
+                    border-radius: 50%;
+                    color: #ffffff;
+                    font-weight: bold;
+                }
             }
             & .date{
                 min-height: 70px;

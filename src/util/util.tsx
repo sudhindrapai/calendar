@@ -87,6 +87,9 @@ export const getCalDatesObj = (
 
   let preMonthDates = getPreviousMonthDates(monthIndex, year, monthFirstDay);
 
+  let nextMonthIndex = monthIndex + 1 > 11 ? 0 : monthIndex + 1;
+  let previousMonthIndex = monthIndex - 1 < 0 ? 0 : monthIndex - 1;
+
   while (dates <= totalNoOfDays) {
     if (weekcounter < 7) {
       weekcounter = weekcounter + 1;
@@ -98,7 +101,7 @@ export const getCalDatesObj = (
       let tempObj = {} as Calbody;
       tempObj["label"] = preMonthDates[i];
       tempObj["key"] = `calDay_${i}`;
-      tempObj["isTodayDate"] = false;
+      tempObj["isTodayDate"] = previousMonthIndex === new Date().getMonth() && preMonthDates[i] === new Date().getDate();
       tempObj["isCurrentMontDate"] = false;
       tempRow.push(tempObj);
       i++;
@@ -117,17 +120,37 @@ export const getCalDatesObj = (
       tempRow = [];
     }
   }
+  let nextMonthcount = 1;
 
   if (tempRow.length > 0) {
+    
     for (let i = tempRow.length; i < 7; i++) {
       let tempObj = {} as Calbody;
-      tempObj["label"] = "";
+      tempObj["label"] = nextMonthcount;
       tempObj["key"] = `calDay_${i}_${i}`;
+      tempObj["isCurrentMontDate"] = false;
+      tempObj["isTodayDate"] = nextMonthIndex === new Date().getMonth() && nextMonthcount === new Date().getDate();
       tempRow.push(tempObj);
+      nextMonthcount = nextMonthcount + 1;
     }
     calBody.push(tempRow);
     tempRow = [];
   }
+
+  if (calBody.length < 6) {
+    for (let i=0; i<7;i++) {
+      let tempObj = {} as Calbody;
+      tempObj["label"] = nextMonthcount;
+      tempObj["key"] = `calDay_${i}_${i}`;
+      tempObj["isCurrentMontDate"] = false;
+      tempObj["isTodayDate"] = nextMonthIndex === new Date().getMonth() && nextMonthcount === new Date().getDate();
+      tempRow.push(tempObj);
+      nextMonthcount = nextMonthcount + 1;
+    }
+    calBody.push(tempRow);
+    tempRow = [];
+  }
+  console.log(calBody.length)
 
   return calBody;
 };
