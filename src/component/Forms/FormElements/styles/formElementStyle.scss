@@ -1,0 +1,26 @@
+.ElementWrapper {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 20px ;
+    & label{
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    & label:after {
+        content: "*";
+        color: red;
+    }
+
+    & input{
+        height: 30px;
+        box-shadow: none;
+    }
+
+    & textarea{
+        height: 100px;
+        width: 100%;
+        resize: unset;
+    }
+}

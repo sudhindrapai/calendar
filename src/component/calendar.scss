@@ -1,3 +1,4 @@
+@import '../variables.scss';
 .wrapper{
     width: 100%;
     box-sizing: border-box;
@@ -75,8 +76,9 @@
                 }
             }
             & .date{
-                min-height: 70px;
+                min-height: 90px;
                 position: relative;
+                padding-top: 20px;
                 & .today{
                     display: inline-flex;
                     align-items: center;
@@ -93,6 +95,16 @@
                     position: absolute;
                     top: 0;
                     right: 2%;
+                }
+
+                & .event{
+                    border-left: 2px solid $barOneColor;
+                    margin-bottom: 2px;
+                    background-color: $barOneBgColor;
+                    font-size: 12px;
+                    padding-block: 2px;
+                    text-align: left;
+                    padding-left: 5px;
                 }
             }
 

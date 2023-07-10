@@ -1,0 +1,5 @@
+@mixin eventDetail ($borderColor, $bgColor) {
+    border-left: 1px solid $borderColor;
+    background-color: $bgColor;
+    border-radius: 2px;
+}

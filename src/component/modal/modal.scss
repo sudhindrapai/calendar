@@ -1,0 +1,53 @@
+.backdrop{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.3);
+    position: fixed;
+    z-index: 99;
+}
+.modalWrapper {
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+
+    & .modalContainer {
+        width: calc(100vw - 60vw);
+        min-height: calc(100vh - 50vh);
+        background-color: #fff;
+        z-index: 100;
+        border-radius: 1%;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        & .title{
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 14px 0;
+            font-size: 18px;
+            border-bottom: 1px solid #ccc;
+            font-weight: 500;
+            position: relative;
+
+            & .close{
+                position: absolute;
+                right: 15px;
+                border: 1px solid #fb2629;
+                padding: 2px 5px;
+                background-color: #fb2629;
+                color: #ffffff;
+                border-radius: 2px;
+                font-size: 12px;
+                cursor: pointer;
+            }
+        }
+
+        & .body{
+            padding: 15px;
+        }
+    }
+}

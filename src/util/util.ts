@@ -3,6 +3,10 @@ interface Calbody {
   key: string;
   isTodayDate: boolean;
   isCurrentMontDate:boolean;
+  year:string|number;
+  eventKey: string;
+  canAddEvent:boolean,
+  events:string[] | []
 }
 
 export const getModifiedDateObj = (month: number, year: number): Date => {
@@ -71,10 +75,28 @@ const getPreviousMonthDates = (
   return datesArray.reverse();
 };
 
+const checkForTTL = ():boolean => {
+  let isValidTTL: boolean = false
+  let TTL = localStorage.getItem("TTL");
+  if (TTL === undefined || TTL == null) {
+    localStorage.setItem("TTL",JSON.stringify(new Date()));
+    isValidTTL = false;
+  } else {
+  let TTLDateObj = new Date(JSON.parse(TTL));
+  let currentDateObj = new Date();
+    isValidTTL = TTLDateObj.getFullYear() === currentDateObj.getFullYear() &&
+    TTLDateObj.getDate() === currentDateObj.getDate() &&
+    TTLDateObj.getMonth() === currentDateObj.getMonth();
+    
+  }
+  return isValidTTL
+}
+
 const checkForCalDates = (monthIndex:number,year:number) => {
   if (typeof (Storage) !== "undefined") {
+    let isValidTTL = checkForTTL()
     let calObjString = localStorage.getItem("calDates");
-    if (calObjString) {
+    if (calObjString && isValidTTL) {
       let calObj = JSON.parse(calObjString);
       let key = `${monthIndex}${year}`;
       if (calObj[key] !== undefined) {
@@ -82,6 +104,8 @@ const checkForCalDates = (monthIndex:number,year:number) => {
       } else {
         return null;
       }
+    } else {
+      return null
     }
   }
 };
@@ -113,8 +137,8 @@ export const getCalDatesObj = (
 
   let calDetails = checkForCalDates(monthIndex,year);
 
-  if (calDetails !== null) {
-    return JSON.parse(calDetails)
+  if (calDetails !== null && calDetails !== undefined) {
+    return JSON.parse(calDetails);
   }
 
   let dates = 1;
@@ -141,6 +165,10 @@ export const getCalDatesObj = (
       tempObj["key"] = `calDay_${i}`;
       tempObj["isTodayDate"] = previousMonthIndex === new Date().getMonth() && preMonthDates[i] === new Date().getDate();
       tempObj["isCurrentMontDate"] = false;
+      tempObj["year"] = year;
+      tempObj["eventKey"] = `${preMonthDates[i]}_${previousMonthIndex}_${year}`;
+      tempObj["canAddEvent"] = false;
+      tempObj["events"] = [];
       tempRow.push(tempObj);
       i++;
     } else {
@@ -149,6 +177,10 @@ export const getCalDatesObj = (
       tempObj["key"] = `calDay_${i}`;
       tempObj["isTodayDate"] = isCurrentMonth && currentDate === dates;
       tempObj["isCurrentMontDate"] = true;
+      tempObj["year"] = year;
+      tempObj["eventKey"] = `${dates}_${monthIndex}_${year}`;
+      tempObj["canAddEvent"] = true;
+      tempObj["events"] = [];
       tempRow.push(tempObj);
       dates = dates + 1;
     }
@@ -168,6 +200,10 @@ export const getCalDatesObj = (
       tempObj["key"] = `calDay_${i}_${i}`;
       tempObj["isCurrentMontDate"] = false;
       tempObj["isTodayDate"] = nextMonthIndex === new Date().getMonth() && nextMonthcount === new Date().getDate();
+      tempObj["year"] = year;
+      tempObj["eventKey"] = `${nextMonthcount}_${monthIndex}_${year}`;
+      tempObj["canAddEvent"] = false;
+      tempObj["events"] = [];
       tempRow.push(tempObj);
       nextMonthcount = nextMonthcount + 1;
     }
@@ -182,6 +218,10 @@ export const getCalDatesObj = (
       tempObj["key"] = `calDay_${i}_${i}`;
       tempObj["isCurrentMontDate"] = false;
       tempObj["isTodayDate"] = nextMonthIndex === new Date().getMonth() && nextMonthcount === new Date().getDate();
+      tempObj["year"] = year;
+      tempObj["eventKey"] = `${nextMonthcount}_${monthIndex}_${year}`;
+      tempObj["canAddEvent"] = false;
+      tempObj["events"] = [];
       tempRow.push(tempObj);
       nextMonthcount = nextMonthcount + 1;
     }
