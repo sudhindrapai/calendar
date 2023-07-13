@@ -89,12 +89,17 @@ const checkForTTL = ():boolean => {
     TTLDateObj.getMonth() === currentDateObj.getMonth();
     
   }
+
+  if (isValidTTL === false) {
+    localStorage.setItem("TTL",JSON.stringify(new Date()));
+  }
+
   return isValidTTL
 }
 
 const checkForCalDates = (monthIndex:number,year:number) => {
   if (typeof (Storage) !== "undefined") {
-    let isValidTTL = checkForTTL()
+    let isValidTTL = checkForTTL();
     let calObjString = localStorage.getItem("calDates");
     if (calObjString && isValidTTL) {
       let calObj = JSON.parse(calObjString);
@@ -138,8 +143,10 @@ export const getCalDatesObj = (
   let calDetails = checkForCalDates(monthIndex,year);
 
   if (calDetails !== null && calDetails !== undefined) {
+    console.log("I am from local storage")
     return JSON.parse(calDetails);
   }
+  console.log("I am from logic")
 
   let dates = 1;
   let calBody = [];

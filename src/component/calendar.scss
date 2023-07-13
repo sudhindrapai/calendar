@@ -1,3 +1,4 @@
+@use '../mixins.scss';
 @import '../variables.scss';
 .wrapper{
     width: 100%;
@@ -51,12 +52,16 @@
             border: 1px solid #ccc;
             text-align: center;
             padding: 3px;
+            min-height: 120px;
+            height: 120px;
 
             & .oldDate{
-                min-height: 70px;
                 position: relative;
                 opacity: 0.2;
-
+                position: relative;
+                padding-top: 20px;
+                height: 100%;
+                box-sizing: border-box;
                 & span {
                     position: absolute;
                     top: 0;
@@ -76,7 +81,8 @@
                 }
             }
             & .date{
-                min-height: 90px;
+                height: 100%;
+                box-sizing: border-box;
                 position: relative;
                 padding-top: 20px;
                 & .today{
@@ -97,15 +103,55 @@
                     right: 2%;
                 }
 
-                & .event{
-                    border-left: 2px solid $barOneColor;
-                    margin-bottom: 2px;
-                    background-color: $barOneBgColor;
-                    font-size: 12px;
-                    padding-block: 2px;
+                & .PATTERN1 {
+                    @include mixins.eventDetail($barOneColor,$barOneBgColor);
+                    width: 100%;
+                    box-sizing: border-box;
                     text-align: left;
-                    padding-left: 5px;
+                    display: flex;
+                    min-height: 24px;
+                    margin-bottom: 2px;
                 }
+                
+                & .PATTERN2 {
+                    @include mixins.eventDetail($pattern2BarColor,$pattern2BgColor);
+                    width: 100%;
+                    box-sizing: border-box;
+                    text-align: left;
+                    display: flex;
+                    min-height: 24px;
+                    margin-bottom: 2px;
+                }
+                
+                & .PATTERN3 {
+                    @include mixins.eventDetail($pattern3BarColor,$pattern3BgColor);
+                    width: 100%;
+                    box-sizing: border-box;
+                    text-align: left;
+                    display: flex;
+                    min-height: 24px;
+                    margin-bottom: 2px;
+                }
+                
+                & .PATTERN4 {
+                    @include mixins.eventDetail($pattern4BarColor,$pattern4BgColor);
+                    width: 100%;
+                    box-sizing: border-box;
+                    text-align: left;
+                    display: flex;
+                    min-height: 24px;
+                    margin-bottom: 2px;
+                }
+
+                // & .event{
+                //     border-left: 2px solid $barOneColor;
+                //     margin-bottom: 2px;
+                //     background-color: $barOneBgColor;
+                //     font-size: 12px;
+                //     padding-block: 2px;
+                //     text-align: left;
+                //     padding-left: 5px;
+                // }
             }
 
         }

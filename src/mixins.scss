@@ -1,5 +1,13 @@
 @mixin eventDetail ($borderColor, $bgColor) {
-    border-left: 1px solid $borderColor;
+    border-left: 3px solid $borderColor;
     background-color: $bgColor;
     border-radius: 2px;
+    padding: 2px 4px;
+    font-size: 14px;
+    font-weight:400;
+    width: clamp(120px, 100px, 100px);
+    max-height: 20px;
+    border: 1px solid $bgColor;
+    border-left: 3px solid $borderColor;
+    padding-top: 3px;
 }

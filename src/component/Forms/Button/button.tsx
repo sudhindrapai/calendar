@@ -1,5 +1,5 @@
 import {FC} from 'react';
-
+import './styledButton.scss'
 interface ButtonProps {
     type:"button" | "submit" | "reset";
     size:string;
@@ -9,7 +9,7 @@ interface ButtonProps {
 
 const Button:FC<ButtonProps> = (props) => {
     const {children, size, type, onBtnClick} = props
-    return <button type={type} onClick={onBtnClick}>
+    return <button className='button' type={type} onClick={onBtnClick}>
         {children}
     </button>
 };

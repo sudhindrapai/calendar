@@ -6,7 +6,8 @@ interface templateOneResponse {
   title: string,
   titleOnCal:string,
   place: string,
-  description:string
+  description:string;
+  patternType:string;
 }
 
 interface ModalProps {

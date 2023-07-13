@@ -1,12 +1,14 @@
 import React, { FC, useState } from "react";
 import FormBuilder from "../FormElements";
 import Button from "../Button/button";
-
+import Patterns from '../../../component/eventPatterns';
+import './template1.scss'
 interface TemplateOneResponse {
   title: string,
   titleOnCal:string,
   place: string,
   description:string
+  patternType:string
 }
 
 interface TemplateOneProps{
@@ -47,6 +49,7 @@ let formElement = [
 const Template:FC<TemplateOneProps> = (props) => {
   const {onCreate} = props;
   const [formElements, setFormElements] = useState(formElement);
+  const [selectedPattern, setSelectedPattern] = useState<string>("")
 
   const handleTextChange = (formValue:string,id:string) => {
     let updatedValues = formElements.map((element) => {
@@ -66,14 +69,23 @@ const Template:FC<TemplateOneProps> = (props) => {
     for (let formObj of formElements) {
       eventDetails[formObj.id] = formObj.value;
     }
-
+    eventDetails["patternType"] = selectedPattern;
+    console.log(eventDetails,"eventDetails")
     onCreate(eventDetails)
-
   };
 
-  return <form onSubmit={createEvent} ><FormBuilder formElements={formElements} onChangeTextInput={handleTextChange} />
-  <Button type={"submit"} size="" onBtnClick={createEvent}>Create</Button>
+  const addPatternToView = (patternType:string) => {
+    setSelectedPattern(patternType)
+  }
+
+  return <><form onSubmit={createEvent} >
+    <FormBuilder formElements={formElements} onChangeTextInput={handleTextChange} />
   </form>
+  <Patterns title={"Title on calendar"} onPatternChange={addPatternToView} />
+  <div className="buttonSection">
+  <Button type={"submit"} size="" onBtnClick={createEvent}>Create</Button>
+  </div>
+  </>
 };
 
 export default Template;

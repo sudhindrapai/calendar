@@ -17,6 +17,7 @@ interface templateOneResponse {
   titleOnCal: string;
   place: string;
   description: string;
+  patternType:string
 }
 
 interface Calbody {
@@ -83,6 +84,7 @@ const Calendar: FC<CalendarProps> = (props) => {
   }, [monthIndex]);
 
   useEffect(() => {
+    console.log("isNewEventAdded")
     if (totalNoDays > 0 && isNewEventAdded === true) {
       let dateObj = new Date();
       let isCurrentMonth =
@@ -192,7 +194,7 @@ const Calendar: FC<CalendarProps> = (props) => {
                       (evetnObj: templateOneResponse, index) => {
                         if (index <= 1) {
                           return (
-                            <div className="event" onClick={showEventDetails}>
+                            <div className={evetnObj.patternType} onClick={showEventDetails}>
                               {evetnObj.titleOnCal}
                             </div>
                           );
@@ -248,7 +250,9 @@ const Calendar: FC<CalendarProps> = (props) => {
             };
           });
         });
+        console.log(updatedColObjArray)
         calListObj[calKey] = JSON.stringify(updatedColObjArray);
+        
         localStorage.setItem("calDates", JSON.stringify(calListObj));
         setEventStatus(true);
         setAddEventModalVisibleState(false);
