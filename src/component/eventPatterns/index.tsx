@@ -8,7 +8,7 @@ interface PatternProps {
 
 const Patters:FC <PatternProps> = (props) => {
     const {title,onPatternChange} = props;
-    const [patternValue, setPatternValue] = useState("");
+    const [patternValue, setPatternValue] = useState("PATTERN1");
 
     const updatePatternValueHandler = (event:React.ChangeEvent<HTMLSelectElement>) => {
         setPatternValue(event.target.value);
@@ -21,7 +21,6 @@ const Patters:FC <PatternProps> = (props) => {
                 Select Pattern
             </label>
             <select id="selectPattern" onChange={updatePatternValueHandler}>
-                <option value={patternValue} >--select--</option>
                 <option value={"PATTERN1"}> PATTERN 1</option>
                 <option value={"PATTERN2"}>PATTERN2</option>
                 <option value={"PATTERN3"}>PATTERN3</option>
